@@ -262,8 +262,7 @@ function touchMoved() {
   {
   append(breakpoints,i)
   }
-}
-  append(breakpoints,array_x.length);
+} 
   
 //----------------------------------------------------------------	  
 	  
@@ -463,9 +462,7 @@ function drawshape()
  
 
 line(0, 0, 0, displayHeight);
- 
-   
-   append(breakpoints,array_x.length);
+  
    
 for(var i = 0; i < breakpoints.length;i++)
 {
