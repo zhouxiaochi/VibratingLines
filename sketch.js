@@ -15,20 +15,18 @@
   
  
  var sound1;
-var sound2;
-var sound3;
-var sound4;
+ var sound2;
+ var sound3;
+ var sound4;
  var sound5;
  
  var indicator;
  
  var MUSIC_LIST = new Array();
- 
- 
+  
  var flag = false;
  var isdrawing = true;
- 
- 
+  
   var input;
   var button_save;
   var button_load;
@@ -47,7 +45,7 @@ var sound4;
   var y_string = new Array();
   var names = new Array();
   var temp_names = new Array();
- var noiseScale=8;
+ var noiseScale = 8;
 var sound, amplitude, cnv;
   
  var stored_x_array;
@@ -64,40 +62,14 @@ var sound, amplitude, cnv;
  
  function preload(){
  
-/* 
- if(changemusic === true)
-  {
-  frameRate(24);
-   
-  	sound.stop();
-    sound.setPath(input.value());
-    
-   
-     
-    if(sound.isLoaded)
-    {
-    sound.play();
-  	}
-  	else
-  	{
-  	alert("not yet loaded");
-  	}
-  }
- else
- {
-     sound = loadSound('test.mp3');
- }  
-*/
 
-frameRate(24);
-
-
-
+frameRate(24);// set the framerate
+ 
 sound1 = loadSound(music_1);
 sound2 = loadSound(music_2);
 sound3 = loadSound(music_3);
 sound4 = loadSound(music_4);
- sound5 = loadSound(music_5);
+sound5 = loadSound(music_5);
  
  sound1.setVolume(volume);
  sound2.setVolume(volume);
@@ -110,99 +82,131 @@ append(MUSIC_LIST,sound1);
 append(MUSIC_LIST,sound2);
 append(MUSIC_LIST,sound3);
 append(MUSIC_LIST,sound4);
-
-
-
-
+ 
 }
  
  function setup() {
  
- 	indicator  = 1;
-   startpoint = 0;
-
-    amplitude = new p5.Amplitude();
-  	cnv = createCanvas(displayWidth, displayHeight);
-	cnv.position(displayWidth / 6, 0);
-	strokeWeight(2)
-	background(0, 0, 0);
-	stroke(255,255,255);
-	strokeWeight(3);
-   line(0, 0, 0, displayHeight);
- 
-  var offset = 100;
-
+    indicator  = 1;// indicator indicates the which music should be played, it will change when difference number button is pressed
   
-  input = createInput();
- 
- input.addClass("input");
+
+    amplitude = new p5.Amplitude();// 
+    cnv = createCanvas(displayWidth, displayHeight);
+    cnv.position(displayWidth / 6, 0);
+   
+	 
+	strokeWeight(2)
+    background(0, 0, 0);// set up the background to be black
+	 
+	 
+	 
+    stroke(255,255,255);
+    strokeWeight(3);
+    line(0, 0, 0, displayHeight);// draw a vertical white line seperating the screen
+  
+  
+	input = createInput();
+	input.addClass("input");// create a input which belongs to the Style class "input" on the screen 
  
   
  
  
   button_save = document.getElementById('button_SAVE');
-  button_save.addEventListener("click", storetheshape);
+  button_save.addEventListener("click", storetheshape);// the button that saves the shapes
   
    
-  button_load = document.getElementById('button_LOAD');
+  button_load = document.getElementById('button_LOAD');// the button that load the shapes after a shape is selected in select
   button_load.addEventListener("click", loadtheshape);
   
   button_clear = document.getElementById('button_CLEAR');
-  button_clear.addEventListener("click", clearscreen);
+  button_clear.addEventListener("click", clearscreen);// the button that clears the screen
  
-  button_eraser = document.getElementById('button_ERASER');
+  button_eraser = document.getElementById('button_ERASER');// the button that can toggle between painter and eraser
   button_eraser.innerHTML = "ERASE";
   button_eraser.addEventListener("click", erase);
  
-    button_stop = document.getElementById('button_STOP');
-    button_stop.innerHTML = "STOP";
-    button_stop.addEventListener("click", function(){ stop = stop * -1; if(stop === 1){MUSIC_LIST[indicator-1].stop();button_stop.innerHTML = "PLAY"}else{MUSIC_LIST[indicator-1].loop();MUSIC_LIST[indicator-1].play();button_stop.innerHTML = "STOP"} });
+  button_stop = document.getElementById('button_STOP');// the button that can toggle between play and stop
+  button_stop.innerHTML = "STOP";
+  button_stop.addEventListener("click", function()
+			       { stop = stop * -1;// integer that serve as the flag for playing/stopping the sound
+				if(stop === 1){MUSIC_LIST[indicator-1].stop();
+					       button_stop.innerHTML = "PLAY"}
+				else{MUSIC_LIST[indicator-1].loop();
+				     MUSIC_LIST[indicator-1].play();
+				     button_stop.innerHTML = "STOP"} 
+			       });
 
  
-  
  
   button_music_1 = document.getElementById('button_FIRST_MUSIC');
-  button_music_1.addEventListener("click", function(){stop = -1; button_stop.innerHTML ="STOP";indicator = 1; flag = true;amplitude.setInput(sound1); sound1.loop();sound1.play(); sound2.stop(); sound3.stop(); sound4.stop(); sound5.stop(); });
-
+  button_music_1.addEventListener("click", function(){stop = -1; 
+						      button_stop.innerHTML ="STOP";
+						      indicator = 1; flag = true;
+						      amplitude.setInput(sound1); 
+													  
+							  for(var i = 0; i < MUSIC_LIST.lenght; i++)
+							  {
+							  	MUSIC_LIST[i].stop();
+							  }
+								MUSIC_LIST[indicator].loop();
+								MUSIC_LIST[indicator].play();
+					  
   button_music_2 = document.getElementById('button_SECOND_MUSIC');
-  button_music_2.addEventListener("click", function(){stop = -1; button_stop.innerHTML ="STOP";indicator = 2;flag = true;amplitude.setInput(sound2);sound2.loop(); sound2.play(); sound1.stop(); sound3.stop(); sound4.stop(); sound5.stop(); });
+  button_music_2.addEventListener("click", function(){stop = -1; 
+						      button_stop.innerHTML ="STOP";
+						      indicator = 2;flag = true;
+						      amplitude.setInput(sound2);
+						
+							  for(var i = 0; i < MUSIC_LIST.lenght; i++)
+							  {
+							  	MUSIC_LIST[i].stop();
+							  }
+								MUSIC_LIST[indicator].loop();
+								MUSIC_LIST[indicator].play();													  
 
 
   button_music_3 = document.getElementById('button_THIRD_MUSIC');
-  button_music_3.addEventListener("click", function(){stop = -1; button_stop.innerHTML ="STOP";indicator = 3;flag = true;amplitude.setInput(sound3); sound3.loop();sound3.play(); sound2.stop(); sound1.stop(); sound4.stop(); sound5.stop(); });
+  button_music_3.addEventListener("click", function(){stop = -1;
+						      button_stop.innerHTML ="STOP";
+						      indicator = 3;flag = true;
+						      amplitude.setInput(sound3); 
 
+							  for(var i = 0; i < MUSIC_LIST.lenght; i++)
+							  {
+							  	MUSIC_LIST[i].stop();
+							  }
+								MUSIC_LIST[indicator].loop();
+								MUSIC_LIST[indicator].play();
+													  
    button_music_4 = document.getElementById('button_FOURTH_MUSIC');
-  button_music_4.addEventListener("click", function(){stop = -1; button_stop.innerHTML ="STOP";indicator = 4;flag = true;amplitude.setInput(sound4);sound4.loop(); sound4.play(); sound2.stop(); sound1.stop(); sound3.stop(); sound5.stop(); });
-  
+  button_music_4.addEventListener("click", function(){stop = -1; 
+						      button_stop.innerHTML ="STOP";
+						      indicator = 4;
+						      flag = true;
+						      amplitude.setInput(sound4);
+							  
+							  for(var i = 0; i < MUSIC_LIST.lenght; i++)
+							  {
+							  	MUSIC_LIST[i].stop();
+							  }
+								MUSIC_LIST[indicator].loop();
+								MUSIC_LIST[indicator].play();
+	 
+	 
  //    button_music_5 = document.getElementById('button_FIFTH_MUSIC');
  //    button_music_5.addEventListener("click", function(){indicator = 5;flag = true;amplitude.setInput(sound5);sound5.loop(); sound5.play(); sound2.stop(); sound1.stop(); sound3.stop(); sound4.stop(); });
   
  // Text wraps within text box
   
-  temp_names = JSON.parse(localStorage.getItem("filenames"));
+    temp_names = JSON.parse(localStorage.getItem("filenames")); //temp_names--get the stored filenames * 1;
   
-    if(typeof temp_names ==='object' && temp_names instanceof Array ){
-     addList();
-    
-  }
-  else
-  {
+	if(typeof temp_names ==='object' && temp_names instanceof Array ){addList();}//
+  	else
+  	{
   	temp_names = new Array();
   	append(temp_names,"Sample");
-  }
- 
- 
-  var length;
-  if(typeof temp_names ==='object' && temp_names instanceof Array ){
-    length = temp_names.length;
-    
-  }
-  else
-  {
-    length = 0;
-  }
-
- 
+  	}
+  
 }
 
 function mousePressed()
@@ -210,36 +214,48 @@ function mousePressed()
  
     if(isdrawing)
   {
-   breakline();
-   breakpoints= new Array();
+   breakline();// add break points (-1,-1) to indicate that a new stroke is started
+   
+   breakpoints= new Array();// initialize the breakpoints array
+   append(breakpoints,0);
+ 
 
-append(breakpoints,0);
-  for(var i = 0; i < array_x.length;i++)
+ for(var i = 0; i < array_x.length;i++)// iterate through the array_x which stores the x coordinates, recreate breakpoints array
 {
   if(array_x[i] < 0)
   {
   append(breakpoints,i)
   }
 }
-
-}
+ 	  
+	}
 
    
 }
 
 function touchMoved() {
 
- 
+//----------------------------------------------------------------	
   if(isdrawing)
   {
   clear();
-  background(0, 0, 0);
+  background(0, 0, 0);// initialize the canvas 
+	  
+//----------------------------------------------------------------
+	  
+	  
+	  
   drawshape();
+	  
+	  
+//----------------------------------------------------------------	  
+//recalculate the breakpoints array basing on new array_x and array_y
   append(array_x,touchX);
   append(array_y,touchY);
   
   breakpoints = new Array();
   append(breakpoints,0);
+	  
     for(var i = 0; i < array_x.length;i++)
 {
   if(array_x[i] < 0)
@@ -247,10 +263,12 @@ function touchMoved() {
   append(breakpoints,i)
   }
 }
-   
-  
   append(breakpoints,array_x.length);
   
+//----------------------------------------------------------------	  
+	  
+	
+	  
   for(var i = 0; i < breakpoints.length;i++)
 {
   beginShape();
@@ -268,9 +286,17 @@ function touchMoved() {
    }
   }
   endShape();
-  
 }
   
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
+	  
 }
  
 else
@@ -375,12 +401,7 @@ localStorage.setItem(input.value() + "x", JSON.stringify(x_string));
 localStorage.setItem(input.value() + "y", JSON.stringify(y_string));
 localStorage.setItem(input.value() + "indicator", indicator.toString());
 inputvalue = input.value();
-
-   if(typeof temp_names ==='object' && temp_names instanceof Array ){
-    length = temp_names.length;
-   
- 	
-  }
+ 
 	
     append(temp_names,input.value());
     localStorage.setItem("filenames", JSON.stringify(temp_names));
@@ -543,9 +564,7 @@ $('#year')
     .find('option')
     .remove()
     .end();
-
-
-    
+ 
      var select = document.getElementById("year");
       
      for(var m = 0; m < select.length; m ++)
